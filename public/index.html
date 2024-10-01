@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<!-- Esto define que el documento es HTML5 -->
+<html lang="es">
+<head>
+  <!-- Establecemos el conjunto de caracteres como UTF-8 para soportar todos los caracteres (incluyendo acentos) -->
+  <meta charset="UTF-8">
+  <!-- Esto asegura que el diseño se ajuste correctamente en dispositivos móviles -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CRUD de Productos</title>
+  <!-- Estilos simples para mejorar la apariencia de la página -->
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    form {
+      margin-bottom: 20px;
+    }
+    label {
+      display: block;
+      margin-top: 10px;
+    }
+    button {
+      margin-top: 10px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 8px;
+      text-align: left;
+    }
+    th {
+      background-color: #f4f4f4;
+    }
+  </style>
+</head>
+<body>
+  <!-- Título principal de la página -->
+  <h1>Gestión de Usuarios</h1>
+
+  <!-- Formulario para crear un nuevo user -->
+  <h2>Crear nuevo usuario</h2>
+  <form id="userForm">
+    <!-- Campo de texto para ingresar el nombre -->
+    <label for="name">Name:</label>
+    <input type="text" id="name" name="name" required>
+
+    <!-- Campo numérico para ingresar el email-->
+    <label for="email">Email:</label>
+    <input type="text" id="email" name="price" required>
+
+    <!-- Área de texto para ingresar la edad-->
+    <label for="age">Age:</label>
+    <input type="text"  id="age" name="age"  required></input>
+
+    <!-- Botón para enviar el formulario y crear el producto -->
+    <button type="submit">Crear Usuario</button>
+  </form>
+
+  <hr>
+
+  <!-- Sección para mostrar la lista de productos existentes -->
+  <h2>Lista de Usuarios</h2>
+  <!-- Botón para cargar los productos desde el servidor -->
+  <button id="loadUsersBtn">Cargar usuarios</button>
+  <!-- Tabla donde se mostrarán los usuarios -->
+  <table id="usersTable">
+    <thead>
+      <tr>
+        <!-- Encabezado de la tabla -->
+        <th>Nombre</th>
+        <th>Email</th>
+        <th>Age</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Aquí se insertarán las filas con los usuarios -->
+    </tbody>
+  </table>
+
+  <!-- Inicio del bloque de JavaScript -->
+
+
+
+  <script>
+    // Aquí se agrega funcionalidad para manejar el formulario y las solicitudes al servidor
+
+    // Capturamos el evento 'submit' (cuando se envía el formulario)
+    document.getElementById('userForm').addEventListener('submit', function (event) {
+      // Prevenimos que el formulario se envíe de manera tradicional (recargando la página)
+      event.preventDefault();
+
+      // Obtenemos los valores ingresados en los campos de texto del formulario
+      const name = document.getElementById('name').value;
+      const email = document.getElementById('email').value;
+      const age = document.getElementById('age').value;
+
+      // Creamos un objeto JavaScript que contiene los datos del nuevo user
+      const productData = {
+        name: name,         // Aquí el nombre del user
+        email: email,        // Aquí el email del user
+        age: age            // Aquí la edad del user
+      };
+
+
+      // Enviamos una solicitud POST al servidor para crear un nuevo producto
+      fetch('http://localhost:3000/users', { // La URL a la que enviamos la solicitud
+        method: 'POST',                           // Método HTTP utilizado (POST para enviar datos)
+        headers: {
+          'Content-Type': 'application/json'      // Indicamos que los datos se envían en formato JSON
+        },
+        body: JSON.stringify(productData)         // Convertimos el objeto 'productData' a formato JSON
+      })
+      .then(response => response.json())          // Esperamos la respuesta del servidor y la convertimos a JSON
+      .then(data => {
+        // Mostramos un mensaje de éxito cuando el producto se crea correctamente
+        alert('Producto creado con éxito');
+        // Limpiamos el formulario después de crear el producto
+        document.getElementById('userForm').reset();
+      })
+      .catch(error => {
+        // Mostramos un mensaje de error si algo falla
+        console.error('Error:', error);
+        alert('Ocurrió un error al crear el producto');
+      });
+    });
+
+    // Cuando se hace clic en el botón de "Cargar usuarios"
+    document.getElementById('loadUsersBtn').addEventListener('click', function () {
+      // Enviamos una solicitud GET al servidor para obtener la lista de usuarios
+      fetch('http://localhost:3000/users')  // La URL para obtener los usuarios
+        .then(response => response.json())       // Convertimos la respuesta a formato JSON
+        .then(data => {
+          // Seleccionamos el cuerpo de la tabla donde se mostrarán los usuarios
+          const tableBody = document.querySelector('#usersTable tbody');
+          tableBody.innerHTML = ''; // Limpiamos la tabla antes de agregar los usuarios
+
+          // Recorremos los usuarios que nos envió el servidor
+          data.forEach(user => {
+            // Creamos una nueva fila en la tabla por cada producto
+            const row = document.createElement('tr');
+            // Insertamos los valores del producto en la fila
+            row.innerHTML = `
+              <td>${user.name}</td>          <!-- Nombre del usuario -->
+              <td>${user.email}</td>          <!-- email del usuario -->
+              <td>${user.age}</td>     <!-- Edad -->
+            `;
+            // Añadimos la nueva fila al cuerpo de la tabla
+            tableBody.appendChild(row);
+          });
+        })
+        .catch(error => {
+          // Si ocurre un error al cargar los usuarios, mostramos un mensaje
+          console.error('Error:', error);
+          alert('Ocurrió un error al cargar los usuarios');
+        });
+    });
+  </script>
+  <!-- Fin del bloque de JavaScript -->
+</body>
+</html>
