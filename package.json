@@ -1,0 +1,18 @@
+{
+  "name": "backcrudbasicoexpressmongodb",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon app.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "backcrudbasicoexpressmongodb": "file:",
+    "express": "^4.21.0",
+    "mongoose": "^8.6.3",
+    "nodemon": "^3.1.7",
+    "validator": "^13.12.0"
+  }
+}
