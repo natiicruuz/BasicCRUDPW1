@@ -107,7 +107,7 @@
 
 
       // Enviamos una solicitud POST al servidor para crear un nuevo producto
-      fetch('http://localhost:3000/users', { // La URL a la que enviamos la solicitud
+      fetch('https://localhost:3000/users', { // La URL a la que enviamos la solicitud
         method: 'POST',                           // Método HTTP utilizado (POST para enviar datos)
         headers: {
           'Content-Type': 'application/json'      // Indicamos que los datos se envían en formato JSON
@@ -131,7 +131,7 @@
     // Cuando se hace clic en el botón de "Cargar usuarios"
     document.getElementById('loadUsersBtn').addEventListener('click', function () {
       // Enviamos una solicitud GET al servidor para obtener la lista de usuarios
-      fetch('http://localhost:3000/users')  // La URL para obtener los usuarios
+      fetch('https://localhost:3000/users')  // La URL para obtener los usuarios
         .then(response => response.json())       // Convertimos la respuesta a formato JSON
         .then(data => {
           // Seleccionamos el cuerpo de la tabla donde se mostrarán los usuarios
